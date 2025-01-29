@@ -1,0 +1,32 @@
+theme:
+  name: material
+  logo: assets/logo.png
+  favicon: assets/favicon.png
+  language: zh
+  palette:
+
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: 切换至浅色主题
+
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: cyan
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: 切换至深色主题
+
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: 切换至自动
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+site_name: GekiChuMai汉化文档
