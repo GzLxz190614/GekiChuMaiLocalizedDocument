@@ -30,3 +30,4 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.superfences
 site_name: GekiChuMai汉化文档
+use_directory_urls: false
