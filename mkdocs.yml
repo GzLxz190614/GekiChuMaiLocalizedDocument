@@ -3,6 +3,10 @@ theme:
   logo: assets/logo.png
   favicon: assets/favicon.png
   language: zh
+  custom_dir: overrides
+#  features:
+#    - navigation.tabs
+#    - navigation.tracking
   palette:
 
     - media: "(prefers-color-scheme)"
@@ -31,3 +35,5 @@ markdown_extensions:
   - pymdownx.superfences
 site_name: GekiChuMai汉化文档
 use_directory_urls: false
+#extra_css:
+#  - stylesheets/extra.css
