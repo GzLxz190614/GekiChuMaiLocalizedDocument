@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 theme:
   name: material
   logo: assets/logo.png
@@ -43,44 +42,4 @@ markdown_extensions:
 site_name: GekiChuMai汉化文档
 use_directory_urls: false
 #extra_css:
-=======
-theme:
-  name: material
-  logo: assets/logo.png
-  favicon: assets/favicon.png
-  language: zh
-  custom_dir: overrides
-#  features:
-#    - navigation.tabs
-#    - navigation.tracking
-  palette:
-
-    - media: "(prefers-color-scheme)"
-      toggle:
-        icon: material/brightness-auto
-        name: 切换至浅色主题
-
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: cyan
-      accent: indigo
-      toggle:
-        icon: material/weather-night
-        name: 切换至深色主题
-
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: teal
-      accent: indigo
-      toggle:
-        icon: material/weather-sunny
-        name: 切换至自动
-markdown_extensions:
-  - admonition
-  - pymdownx.details
-  - pymdownx.superfences
-site_name: GekiChuMai汉化文档
-use_directory_urls: false
-#extra_css:
->>>>>>> a871b3caedf7d85f0674848725b81de33bbf3b16
 #  - stylesheets/extra.css
