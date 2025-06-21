@@ -3,6 +3,15 @@ theme:
   logo: assets/logo.png
   favicon: assets/favicon.png
   language: zh
+  custom_dir: overrides
+
+  features:
+    - navigation.top
+    - navigation.instant
+    - navigation.instant.progress
+#    - navigation.tabs
+#    - navigation.tracking
+
   palette:
 
     - media: "(prefers-color-scheme)"
@@ -25,8 +34,12 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: 切换至自动
+
 markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
 site_name: GekiChuMai汉化文档
+use_directory_urls: false
+#extra_css:
+#  - stylesheets/extra.css
