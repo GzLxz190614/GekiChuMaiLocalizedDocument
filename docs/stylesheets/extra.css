@@ -1,4 +1,25 @@
-[data-md-path="docs/Chunithm/0.start"] {
-    --md-primary-fg-color: #FFC105;
-    --md-accent-fg-color: #FF6E42;
+/* 自定义 credit 提示框样式 */
+:root {
+  /* 定义实心爱心图标 (Bootstrap Icons bi-heart-fill) */
+  --md-admonition-icon--credit: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='currentColor'><path d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>");
+}
+
+/* credit 提示框边框颜色 */
+.md-typeset .admonition.credit,
+.md-typeset details.credit {
+  border-color: pink;
+}
+
+/* credit 提示框标题背景颜色 */
+.md-typeset .credit > .admonition-title,
+.md-typeset .credit > summary {
+  background-color: rgba(255, 192, 203, 0.2); /* 浅粉色半透明 */
+}
+
+/* credit 提示框图标样式 */
+.md-typeset .credit > .admonition-title::before,
+.md-typeset .credit > summary::before {
+  background-color: pink; /* 图标颜色 */
+  -webkit-mask-image: var(--md-admonition-icon--credit);
+  mask-image: var(--md-admonition-icon--credit);
 }

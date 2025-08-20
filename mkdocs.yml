@@ -41,5 +41,5 @@ markdown_extensions:
   - pymdownx.superfences
 site_name: GekiChuMai汉化文档
 use_directory_urls: false
-#extra_css:
-#  - stylesheets/extra.css
+extra_css:
+  - stylesheets/extra.css
