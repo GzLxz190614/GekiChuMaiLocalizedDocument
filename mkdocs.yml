@@ -9,6 +9,8 @@ theme:
     - navigation.top
     - navigation.instant
     - navigation.instant.progress
+    - content.code.copy
+    - navigation.footer
 #    - navigation.tabs
 #    - navigation.tracking
 
