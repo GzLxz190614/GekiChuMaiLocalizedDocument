@@ -41,6 +41,7 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.tilde
 site_name: GekiChuMai汉化文档
 use_directory_urls: false
 extra_css:
