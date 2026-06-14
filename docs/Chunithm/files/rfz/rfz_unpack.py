@@ -183,9 +183,15 @@ def parse_metadata(d):
 
 # 每个字形对象: <u16 marker=3><u32 body_size><body>
 # body: code(u16) + cell_inc_x/cell_inc_y/page/origin_x/origin_y/
-#       box_x1/box_y1/box_x2/box_y2/kerning_info_cnt (10×u16) + kerning_info
+#       box_x1/box_y1/box_x2/box_y2/kerning_info_cnt (10 字段) + kerning_info
+# 字段宽度均 2 字节; origin_x/origin_y 在游戏 schema 中为 s16 (有符号,
+# sub_F270C0/F270F0 注册 "s16"), 其余为 u16。
 GLYPH_FIELDS = ("cell_inc_x", "cell_inc_y", "page", "origin_x", "origin_y",
                 "box_x1", "box_y1", "box_x2", "box_y2", "kerning_info_cnt")
+GLYPH_SIGNED = ("origin_x", "origin_y")
+
+
+def _s16(d, p): return struct.unpack_from("<h", d, p)[0]
 
 
 def parse_glyphs(d, glyph_field_off, glyph_cnt):
@@ -205,7 +211,8 @@ def parse_glyphs(d, glyph_field_off, glyph_cnt):
         body = p + 6
         g = {"code": _u16(d, body)}
         for i, nm in enumerate(GLYPH_FIELDS):
-            g[nm] = _u16(d, body + 2 + 2 * i)
+            off = body + 2 + 2 * i
+            g[nm] = _s16(d, off) if nm in GLYPH_SIGNED else _u16(d, off)
         glyphs.append(g)
         p = body + body_size
     return glyphs
@@ -215,7 +222,14 @@ def parse_glyphs(d, glyph_field_off, glyph_cnt):
 # 4. 内嵌纹理 (DDS, ARGB4444 16bpp)
 # ---------------------------------------------------------------------------
 def extract_textures(d):
-    """按 'DDS ' magic 扫描并按头部 linearSize 精确切出每张图集。"""
+    """按 'DDS ' magic 扫描并按头部精确切出每张图集。
+
+    dwPitchOrLinearSize(+0x14) 的含义由 dwFlags(+0x08) 决定:
+      DDSD_LINEARSIZE(0x80000) -> 该值即整块字节数 (SEGA 原始 DDS);
+      DDSD_PITCH(0x8)          -> 该值是每行字节数, 整块 = pitch×height (bmfont DDS)。
+    两者皆无效时按 ARGB4444 (2 字节/像素) 估算。
+    """
+    DDSD_PITCH, DDSD_LINEARSIZE = 0x8, 0x80000
     textures = []
     start = 0
     while True:
@@ -225,15 +239,81 @@ def extract_textures(d):
         if _u32(d, off + 4) != 124:        # dwSize 必须为 124, 否则误命中
             start = off + 4
             continue
+        flags = _u32(d, off + 8)
         h = _u32(d, off + 12)              # dwHeight
         w = _u32(d, off + 16)              # dwWidth
-        lin = _u32(d, off + 20)            # dwPitchOrLinearSize
-        if lin == 0:
+        pol = _u32(d, off + 20)            # dwPitchOrLinearSize
+        if flags & DDSD_LINEARSIZE and pol:
+            lin = pol
+        elif flags & DDSD_PITCH and pol:
+            lin = pol * h                  # 每行字节 × 行数
+        else:
             lin = w * h * 2                # ARGB4444 = 2 字节/像素
         total = 128 + lin
         textures.append((off, w, h, bytes(d[off:off + total])))
         start = off + total
     return textures
+
+
+def extract_svo(d):
+    """切出内嵌字体纹理 SVO (Database._texture 的 TextureResource.file blob)。
+
+    解压流末段为一个 ruhuna::TextureResource 对象帧:
+        <u16 tag=4><u32 body=4+svo_len><u32 svo_len><AVTS...svo bytes>
+    帧紧贴 AVTS magic 之前 10 字节, svo_len 即真正 svo 长度 (不含其后 19 字节
+    段H 全零尾)。返回 (svo_bytes, avts_offset) 或 (None, -1)。
+    """
+    avts = d.find(b"AVTS")
+    if avts < 0 or avts < 10:
+        return None, -1
+    svo_len = _u32(d, avts - 4)            # TextureResource.file blob 长度
+    if avts + svo_len > len(d):
+        svo_len = len(d) - avts            # 兜底: 取到流尾
+    return bytes(d[avts:avts + svo_len]), avts
+
+
+def cstr(d, o):
+    end = d.find(b"\x00", o)
+    return d[o:end].decode("ascii", "replace") if end >= 0 else ""
+
+
+def svo_self_name(svo):
+    """取 SVO 自身的内嵌名: chunk 目录条目 0 (内层 YABX, kind=0) 名为
+    `__HmfToSvo__<font_base>.svo`, 剥前缀后即 `<font_base>.svo`。无则返回 None。"""
+    if not svo or svo[:4] != b"AVTS":
+        return None
+    name = cstr(svo, 0x80)
+    if not name:
+        return None
+    if name.startswith("__HmfToSvo__"):
+        name = name[len("__HmfToSvo__"):]
+    return os.path.basename(name.replace("\\", "/"))
+
+
+def svo_dds_names(svo):
+    """从 SVO 的 AVTS chunk 目录取各 DDS 的内嵌名 (剥离 __HmfToSvo__ 前缀)。
+
+    目录: 0x80 起, stride 0x400, name@+0, kind@+0x200(1=DDS), offset@+0x20C。
+    返回按页序的文件名列表 (无 DDS 时为空)。
+    """
+    if not svo or svo[:4] != b"AVTS":
+        return []
+    names, k = [], 0
+    while True:
+        base = 0x80 + k * 0x400
+        if base + 0x210 > len(svo):
+            break
+        name = cstr(svo, base)
+        if not name:
+            break
+        kind = _u32(svo, base + 0x200)
+        if kind == 1:                      # DDS chunk
+            nm = name
+            if nm.startswith("__HmfToSvo__"):
+                nm = nm[len("__HmfToSvo__"):]
+            names.append(os.path.basename(nm.replace("\\", "/")))
+        k += 1
+    return names
 
 
 # ---------------------------------------------------------------------------
@@ -250,6 +330,7 @@ def unpack(in_path, out_dir):
     meta, glyph_field_off = parse_metadata(decompressed)
     glyphs = parse_glyphs(decompressed, glyph_field_off, meta["glyph_cnt"])
     textures = extract_textures(decompressed)
+    svo, svo_off = extract_svo(decompressed)
 
     with open(os.path.join(out_dir, "metadata.json"), "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
@@ -261,9 +342,20 @@ def unpack(in_path, out_dir):
             f.write(str(g["code"]) + "," +
                     ",".join(str(g[k]) for k in GLYPH_FIELDS) + "\n")
 
+    # 内嵌字体纹理 SVO (TextureResource.file blob); 按内嵌名命名, 无则 texture.svo
+    svo_name = (svo_self_name(svo) or "texture.svo") if svo else None
+    if svo:
+        with open(os.path.join(out_dir, svo_name), "wb") as f:
+            f.write(svo)
+
+    # DDS 命名: 优先用 SVO chunk 目录里的内嵌名, 否则回退 page%d.dds
+    dds_names = svo_dds_names(svo) if svo else []
+    saved_names = []
     for i, (off, w, h, blob) in enumerate(textures):
-        with open(os.path.join(out_dir, "page%d.dds" % i), "wb") as f:
+        nm = dds_names[i] if i < len(dds_names) else "page%d.dds" % i
+        with open(os.path.join(out_dir, nm), "wb") as f:
             f.write(blob)
+        saved_names.append(nm)
 
     print("[OK] %s" % os.path.basename(in_path))
     print("  解压: %d -> %d 字节 (LZW 重置 %d 次)" %
@@ -273,8 +365,10 @@ def unpack(in_path, out_dir):
            meta["tex_page"], meta["glyph_cnt"]))
     print("  解析字形: %d 条 (code %d..%d)" %
           (len(glyphs), glyphs[0]["code"], glyphs[-1]["code"]))
+    if svo:
+        print("  内嵌 SVO: %d 字节 (AVTS @0x%x) -> %s" % (len(svo), svo_off, svo_name))
     print("  纹理: %d 张 -> %s" %
-          (len(textures), ", ".join("%dx%d" % (w, h) for _, w, h, _ in textures)))
+          (len(textures), ", ".join(saved_names)))
     print("  输出目录: %s" % out_dir)
 
 
