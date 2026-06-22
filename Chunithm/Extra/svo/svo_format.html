@@ -1,0 +1,3939 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="2.svo.html">
+      
+      
+        <link rel="next" href="../../../MaimaiDX/0.start.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>SVO 文件格式分析 — 完整规格说明 - GekiChuMai汉化文档</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#svo" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../index.html" title="GekiChuMai汉化文档" class="md-header__button md-logo" aria-label="GekiChuMai汉化文档" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GekiChuMai汉化文档
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SVO 文件格式分析 — 完整规格说明
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换至浅色主题"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换至浅色主题" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo"  aria-label="切换至深色主题"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换至深色主题" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="切换至自动"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="切换至自动" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../index.html" title="GekiChuMai汉化文档" class="md-nav__button md-logo" aria-label="GekiChuMai汉化文档" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    GekiChuMai汉化文档
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    欢迎
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chunithm
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chunithm
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../0.start.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开始
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.dds.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    图片素材文件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2.font.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    字体
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3.option_xml.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Option相关文件汉化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.srd.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    srd文件汉化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5.db.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    db文件夹中的bin文件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    其他
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_8" id="__nav_2_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extra
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Extra
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.afb.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    afb文件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.srd.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    srd文件额外内容
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_8_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_8_3" id="__nav_2_8_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rfz
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Rfz
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rfz/1.rfz_unpack_spec.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RFZ 字体解包权威规范
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rfz/2.rfz_glyph_coords_analysis.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RFZ 字形坐标语义深度分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rfz/3.rfz_pack_spec.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RFZ 字体打包规范
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rfz/4.bmfont_to_rfz_spec.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bmfont → RFZ 全新字体打包 (模板无关) 规格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rfz/5.rfz_glyph_count_limit.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RFZ 字形数量上限 (signed-16-bit localID) —— MSYH 字体崩溃根因
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_8_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_8_4" id="__nav_2_8_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Svo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_8_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Svo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.svo.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    svo文件贴图提取
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVO 文件格式分析 — 完整规格说明
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="svo_format.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVO 文件格式分析 — 完整规格说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 概述
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 概述">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-exe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 大四应用.exe 中已复核的关键函数 (本次重命名)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 文件整体结构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-avts-header-chunk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. AVTS Header + chunk 目录表 (★ 本次纠正: 是目录表, 非仅名称池 ★)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. AVTS Header + chunk 目录表 (★ 本次纠正: 是目录表, 非仅名称池 ★)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 版本差异
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 实测目录 (两文件验证)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-yabx-ida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. YABX 容器 (★ 本次重写, 已 IDA + 字节双重验证 ★)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. YABX 容器 (★ 本次重写, 已 IDA + 字节双重验证 ★)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-yabx-header-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 YABX Header (16 字节)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-yb_writestring_lenprefixed-0xea2bb0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 字符串编码 (两种, 由 Yb_WriteString_LenPrefixed @0xEA2BB0 权威确定)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 顶层头 + 命名空间表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 类定义 (schema / 类型注册) ★ 已端到端验证 ★
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-stevia-chu_barline_blue_v10svo-schema-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 完整 stevia 类层次与字段表 (从 chu_barline_blue_v10.svo schema 提取, 19 个类)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 实例数据语法 (★ 本次深入逆向, 已逐字节验证 ★)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-vbo-ibo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 几何数据块 (VBO / IBO)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 几何数据块 (VBO / IBO)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-vertexelement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 VertexElement 语义 / 类型 (推断自实例枚举值)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-chunk-__pnt__pnct-stride" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 顶点格式一览 (从 chunk 名 __PNT/__PNCT 等推断 + 实测 stride)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-ntt_ahact_01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 真实几何解码实例 (★ ntt_ahact_01, 已端到端解出 ★)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-dds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. DDS 贴图段
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. DDS 贴图段">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 位置与提取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-dds-128b-ddsurfacedesc2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 DDS 头 (128B, 标准 DDSURFACEDESC2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 已知格式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 文件名关联
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 版本差异汇总
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 枚举值参考 (推断自实例数据)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-steviaparameter-variant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 材质参数列表 (stevia::Parameter / Variant, 名称池实测)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. 材质参数列表 (stevia::Parameter / Variant, 名称池实测)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 基础光照
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-sega-sea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 SEGA 引擎参数 (sea*, 名称池实测)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-ts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 双层/卡通着色 (ts*, 名称池实测)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-rdcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 rdcp* 参数 (名称池实测)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 文件偏移快速参考
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. 文件偏移快速参考">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-chu_barline_blue_v10svo-v4-16640b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 chu_barline_blue_v10.svo (v4, 16,640B) — 已逐字节核对
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-ntt_airdwtilt_01svo-v5-97kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 ntt_airdwtilt_01.svo (v5, ~97KB)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-svo_viewerpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 解析流程 (供 svo_viewer.py 参考)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. 待进一步逆向 (诚实标注)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-svo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. SVO 的完整用途 (★ 回答"是否只存贴图+模型" ★)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. SVO 的完整用途 (★ 回答&#34;是否只存贴图+模型&#34; ★)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141-tree-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 场景图 / 骨骼层级 (Tree / Node)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142-skinning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 蒙皮 (Skinning)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143-morph-blend-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 Morph / Blend-Shape (形变目标)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#144-state-parametervariant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4 完整材质 / 着色器系统 (State + Parameter/Variant)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#145-texture-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.5 贴图采样配置 (Texture / Image)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#146" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.6 包围体与渲染排序 (剔除 / 排序)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#147-mesh-batch-vertexbuffer-indexbuffer-vertexdeclaration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7 几何 (Mesh / Batch / VertexBuffer / IndexBuffer / VertexDeclaration)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-svo-fontfont_svo_packpy-2026-06-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. 字体纹理 SVO 生成器 (font/font_svo_pack.py, 2026-06-14, 逐字节验证)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. 字体纹理 SVO 生成器 (font/font_svo_pack.py, 2026-06-14, 逐字节验证)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151-localid-10001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 对象布局 (localID 自 10001)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152-34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 ★ 本次新确认的三处字节级细节 (旧 §3/§4 未覆盖) ★
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153-hash-crc-32bzip2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 hash = CRC-32/BZIP2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#154-body" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.4 字段编码速查 (实例 body 内)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#155" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.5 用法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. 参考
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MaimaiDX
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MaimaiDX
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MaimaiDX/0.start.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开始
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MaimaiDX/1.perpare.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    准备阶段
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MaimaiDX/2.extract.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    资源提取
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mod
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mod
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MaimaiDX/Mod/0.start.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开始
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    简单方法
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    简单方法
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MaimaiDX/%E7%AE%80%E5%8D%95%E6%96%B9%E6%B3%95/0.start.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开始
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    O.N.G.E.K.I
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    O.N.G.E.K.I
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../O.N.G.E.K.I/0.start.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开始
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../O.N.G.E.K.I/1.font.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    字体
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../O.N.G.E.K.I/2.db.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    db文件夹中的bin文件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../O.N.G.E.K.I/3.textInCode.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    位于代码中的文字
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../O.N.G.E.K.I/4.pics.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    游戏内图片
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 概述
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 概述">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-exe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 大四应用.exe 中已复核的关键函数 (本次重命名)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 文件整体结构
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-avts-header-chunk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. AVTS Header + chunk 目录表 (★ 本次纠正: 是目录表, 非仅名称池 ★)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. AVTS Header + chunk 目录表 (★ 本次纠正: 是目录表, 非仅名称池 ★)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 版本差异
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 实测目录 (两文件验证)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-yabx-ida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. YABX 容器 (★ 本次重写, 已 IDA + 字节双重验证 ★)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. YABX 容器 (★ 本次重写, 已 IDA + 字节双重验证 ★)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-yabx-header-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 YABX Header (16 字节)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-yb_writestring_lenprefixed-0xea2bb0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 字符串编码 (两种, 由 Yb_WriteString_LenPrefixed @0xEA2BB0 权威确定)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 顶层头 + 命名空间表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 类定义 (schema / 类型注册) ★ 已端到端验证 ★
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-stevia-chu_barline_blue_v10svo-schema-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 完整 stevia 类层次与字段表 (从 chu_barline_blue_v10.svo schema 提取, 19 个类)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 实例数据语法 (★ 本次深入逆向, 已逐字节验证 ★)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-vbo-ibo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 几何数据块 (VBO / IBO)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 几何数据块 (VBO / IBO)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-vertexelement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 VertexElement 语义 / 类型 (推断自实例枚举值)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-chunk-__pnt__pnct-stride" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 顶点格式一览 (从 chunk 名 __PNT/__PNCT 等推断 + 实测 stride)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-ntt_ahact_01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 真实几何解码实例 (★ ntt_ahact_01, 已端到端解出 ★)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-dds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. DDS 贴图段
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. DDS 贴图段">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 位置与提取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-dds-128b-ddsurfacedesc2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 DDS 头 (128B, 标准 DDSURFACEDESC2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 已知格式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 文件名关联
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 版本差异汇总
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 枚举值参考 (推断自实例数据)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-steviaparameter-variant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 材质参数列表 (stevia::Parameter / Variant, 名称池实测)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. 材质参数列表 (stevia::Parameter / Variant, 名称池实测)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 基础光照
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-sega-sea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 SEGA 引擎参数 (sea*, 名称池实测)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-ts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 双层/卡通着色 (ts*, 名称池实测)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-rdcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 rdcp* 参数 (名称池实测)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 文件偏移快速参考
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. 文件偏移快速参考">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-chu_barline_blue_v10svo-v4-16640b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 chu_barline_blue_v10.svo (v4, 16,640B) — 已逐字节核对
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-ntt_airdwtilt_01svo-v5-97kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 ntt_airdwtilt_01.svo (v5, ~97KB)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-svo_viewerpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 解析流程 (供 svo_viewer.py 参考)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. 待进一步逆向 (诚实标注)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-svo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. SVO 的完整用途 (★ 回答"是否只存贴图+模型" ★)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. SVO 的完整用途 (★ 回答&#34;是否只存贴图+模型&#34; ★)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141-tree-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 场景图 / 骨骼层级 (Tree / Node)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142-skinning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 蒙皮 (Skinning)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143-morph-blend-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 Morph / Blend-Shape (形变目标)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#144-state-parametervariant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4 完整材质 / 着色器系统 (State + Parameter/Variant)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#145-texture-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.5 贴图采样配置 (Texture / Image)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#146" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.6 包围体与渲染排序 (剔除 / 排序)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#147-mesh-batch-vertexbuffer-indexbuffer-vertexdeclaration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7 几何 (Mesh / Batch / VertexBuffer / IndexBuffer / VertexDeclaration)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-svo-fontfont_svo_packpy-2026-06-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. 字体纹理 SVO 生成器 (font/font_svo_pack.py, 2026-06-14, 逐字节验证)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. 字体纹理 SVO 生成器 (font/font_svo_pack.py, 2026-06-14, 逐字节验证)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151-localid-10001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 对象布局 (localID 自 10001)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152-34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 ★ 本次新确认的三处字节级细节 (旧 §3/§4 未覆盖) ★
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153-hash-crc-32bzip2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 hash = CRC-32/BZIP2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#154-body" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.4 字段编码速查 (实例 body 内)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#155" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.5 用法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. 参考
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="svo">SVO 文件格式分析 — 完整规格说明</h1>
+<blockquote>
+<p><strong>2026-06-14 修订要点 (深入实例语法 + 几何解码 + AVTS 结构纠正)</strong>:
+1. <strong>AVTS 实为 chunk 目录表 (CHUNK DIRECTORY)</strong>, 不只是名称池: 描述符块按 <strong>stride 0x400</strong>
+   排布, 块 k 的名字在 <code>0x80 + k*0x400</code>, <code>&lt;u32 size&gt;&lt;u32 file_offset&gt;</code> 指针对在
+   <code>0x288 + k*0x400</code> (即块基址 +0x208)。加载器据此定位 YABX 与各 DDS/VBO/IBO 数据块。
+2. <strong>文件布局顺序纠正</strong>: <code>YABX → DDS×N → VBO/IBO(文件末尾)</code>。几何<strong>不在</strong> YABX 与首个 DDS
+   之间 (那里只有 0~96B 对齐填充); VBO/IBO 追加在所有 DDS 之后, 位于文件最末。旧 §2 顺序作废。
+3. <strong>实例对象记录帧 = <code>&lt;u16 tag=3&gt;&lt;u32 size&gt;&lt;body&gt;</code></strong>; 字段序列化顺序 = <strong>派生类字段在前,
+   基类字段在后</strong> (各层按 schema 声明序)。对象引用列表编码 = <code>&lt;u32 size&gt;&lt;u32 count&gt;&lt;count×u16 localID&gt;</code>。
+4. <strong>已成功解码真实几何</strong> (ntt_ahact_01): 20 顶点 / 30 索引 / stride=28 (PNCT) / UINT16 /
+   三角形带; 位置为合法 3D 坐标, 顶点色 0xFFFFFFFF。
+5. <strong>SVO 是完整 3D 场景容器</strong>, 不止"贴图+网格": 含场景图 (Tree/Node 层级 + 每节点变换/4 矩阵)、
+   蒙皮 (mtxBind + maxInfluence)、morph/blend-shape、完整材质/着色器系统、贴图采样配置、
+   包围体 (球+盒)、渲染排序。详见新增 §14。</p>
+<p><strong>2026-06-11 修订要点 (基于 大四应用.exe IDA 复核 + 逐字节解析 svo 文件)</strong>:
+1. <strong>推翻旧 §4.3 "Tag Byte" 模型</strong>: 那些"标记字节"(0x06/0x0a/0x0d/0x11/0x21…) 实为
+   <strong>u8 字符串长度前缀</strong> (= strlen+1, 含结尾 <code>\0</code>)。由 <code>Yb_WriteString_LenPrefixed</code>
+   @0xEA2BB0 权威证实 (同 RFZ 已被推翻的 "tag=field_id+0x2711" 错误同类)。
+2. <strong>YABX schema 语法已完整、端到端验证</strong>: 用确认的语法解析 <code>chu_barline_blue_v10.svo</code>
+   干净走完全部 19 个 stevia 类定义并精确落到实例数据边界。
+3. <strong>字段类型 = <code>&lt;u8 flag&gt;&lt;u16 inline_size&gt;</code></strong>: 中间 u16 = 内联值字节数
+   (4=u32/f32, 2=u16 localID 引用, 1=bool, 12=vec3, 16=vec4/四元数/颜色, 48=4×3矩阵,
+   0=变长 TLV 字符串/对象数组)。旧 §4.4 的 <code>0x00040000</code> 之类编码作废。
+4. <strong>类头 = <code>01 &lt;u8 base_ref&gt; 00</code></strong>: 第二字节 = 基类的 1-based 索引 (0=无基类), 单继承。
+5. AVTS / 名称池 / DDS / 材质参数 / 枚举 / 文件偏移等旧内容经复核基本正确, 予以保留。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 概述</h2>
+<p>SVO 是 GASE 大四韵律 街机 (大四应用.exe) 的 3D 模型资源格式。每个 <code>.svo</code> 自包含一个
+完整渲染所需的对象图：场景树、网格几何、材质/着色器参数、贴图描述，并在文件末尾内嵌
+标准 DDS 贴图。</p>
+<p><strong>框架链</strong>: <code>ruhuna (文件IO) → yabukita (序列化容器) → stevia (3D 引擎对象模型)</code></p>
+<p>SVO = <strong>AVTS 外层封装</strong> + <strong>YABX 内层容器</strong>:
+- <strong>AVTS</strong>: 文件头 + 名称池 (集中存放所有 chunk/资源/文件名字符串)。
+- <strong>YABX</strong>: yabukita 二进制序列化流, 自描述 schema (类型注册) + 根对象 <code>stevia::Database</code> 实例。
+- 之后是被 chunk 名引用的 <strong>VBO/IBO/DDS</strong> 原始数据块。</p>
+<blockquote>
+<p><strong>与 RFZ 字体的关系 (回答用户疑问)</strong>: RFZ 解压流开头是<strong>裸 YABX</strong> (ruhuna::Database 字体,
+无 AVTS 外壳); 其纹理段内又内嵌一个<strong>完整 SVO</strong> (AVTS + 第二个 YABX, 内含 stevia::Database)。
+故"解压流开头和 svo 数据里都有 YABX" —— 因为 YABX 是通用 yabukita 容器, 字体与 SVO 都用它,
+只是根类不同 (ruhuna::Database vs stevia::Database)。AVTS 则是 SVO 专有的外层封装。</p>
+</blockquote>
+<h3 id="11-exe">1.1 大四应用.exe 中已复核的关键函数 (本次重命名)</h3>
+<table>
+<thead>
+<tr>
+<th>地址</th>
+<th>新名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0xE91400</code></td>
+<td><code>Yb_ReadMagic_CreateProcessor</code></td>
+<td>读 4B magic: <code>YABX</code>(LE) / <code>XBAY</code>(BE) 选反序列化处理器; 仅校验 magic, <strong>不校验 hash</strong></td>
+</tr>
+<tr>
+<td><code>0xEA2BB0</code></td>
+<td><code>Yb_WriteString_LenPrefixed</code></td>
+<td>字符串写入器: mode≠0 → <code>&lt;u8 len&gt;</code> 前缀; mode=0 → <code>&lt;u16 len&gt;</code> 前缀; len 含 <code>\0</code></td>
+</tr>
+<tr>
+<td><code>0xE91300</code></td>
+<td><code>Yb_Finalize_PayloadSizeAndCRC</code></td>
+<td>回填 payload_size + hash(~CRC32, 用 <code>Yb_CRC32_Table</code> @0x18FB268)</td>
+</tr>
+<tr>
+<td><code>0xE91570</code></td>
+<td><code>RuhunaFontDB_Serialize</code></td>
+<td>ruhuna 字体 DB 写入器 (写 RFZ 解压流, 揭示原语方法表)</td>
+</tr>
+</tbody>
+</table>
+<p>序列化原语 (从 <code>RuhunaFontDB_Serialize</code> 调用点确认), 处理器 vtable 槽位:
+<code>+32</code> = 写 u8/bool, <code>+40</code> = 写 u16, <code>+48</code> = 写 u32, <code>Yb_WriteString_LenPrefixed</code> = 写字符串。</p>
+<blockquote>
+<p>大四应用.exe <strong>只读 SVO 不写 SVO</strong> —— stevia schema 由离线工具 <code>HndToSvo</code> 生成
+(故名称池里全是 <code>__HndToSvo__</code> 前缀)。二进制中只存在 ruhuna(字体)写入器与通用 yabukita <strong>读取器</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="2">2. 文件整体结构</h2>
+<div class="highlight"><pre><span></span><code>┌──────────────────────────────────────────────────────────────┐
+│ AVTS Header + chunk 目录表 (变长, 填充至 YABX 起始)             │
+│   &quot;AVTS&quot;(4B) + version u32(4B) + 描述符块×N (stride 0x400)      │
+│   每块: 名字串@+0x80 + &lt;u32 size&gt;&lt;u32 file_off&gt;@+0x208          │
+├──────────────────────────────────────────────────────────────┤
+│ YABX 容器 (yabukita 序列化流)  ← chunk[0] 指向此                │
+│   &quot;YABX&quot;(4B)+ver+payload_size+hash(共16B)                      │
+│   + 顶层头 + 命名空间表 + 类定义(schema) + 根对象实例            │
+├──────────────────────────────────────────────────────────────┤
+│ DDS 贴图段 (N 个标准 DDS 连续存放)  ← chunk[1..k] 指向此        │
+│   注: YABX 与首个 DDS 之间仅有 0~96B 对齐填充                    │
+├──────────────────────────────────────────────────────────────┤
+│ VBO / IBO 几何数据块 (文件最末尾)  ← chunk[k+1..] 指向此        │
+│   几何很小 (~数百字节~KB); 大文件体量主要来自 DDS 纹理          │
+└──────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<blockquote>
+<p><strong>重要纠正</strong>: 旧版假设几何 (VBO/IBO) 位于 YABX 与 DDS 之间, 实测<strong>错误</strong>。几何数据块
+追加在<strong>所有 DDS 之后, 文件最末尾</strong>, 由 AVTS chunk 目录 (§3) 定位。即使 1.1MB 的大文件,
+YABX payload 仍保持 ~16KB, 几何仍仅数百字节~KB —— 文件体量几乎全部是 DDS 纹理。
+实证: <code>ntt_ahact_01</code>(39KB) 与 <code>ntt_ahact_05</code>(152KB) 的 YABX payload <strong>完全相同</strong>(0x4170),
+即同一几何, 仅纹理大小不同。</p>
+</blockquote>
+<hr />
+<h2 id="3-avts-header-chunk">3. AVTS Header + chunk 目录表 (★ 本次纠正: 是目录表, 非仅名称池 ★)</h2>
+<h3 id="31">3.1 结构</h3>
+<div class="highlight"><pre><span></span><code>Offset  Size  Description
+0x00    4     Magic: &quot;AVTS&quot; (0x53545641 LE)
+0x04    4     Version: u32 LE (已知 4, 5, 6)
+0x08    var   chunk 描述符块数组, 每块 stride = 0x400, 填充至 YABX 起始
+</code></pre></div>
+<p>AVTS 头之后是一组<strong>定长描述符块</strong> (stride <strong>0x400</strong>)。每块描述文件中的一个资源 chunk
+(YABX 容器 / DDS 贴图 / VBO / IBO)。块 <code>k</code> 的字段相对其基址 <code>0x80 + k*0x400</code>:</p>
+<table>
+<thead>
+<tr>
+<th>块内偏移</th>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+0x00</code> (= 0x80+k*0x400)</td>
+<td>name 字符串</td>
+<td>null 结尾, <code>__HndToSvo__&lt;...&gt;</code></td>
+</tr>
+<tr>
+<td><code>+0x208</code> (= 0x288+k*0x400)</td>
+<td><code>u32 size</code></td>
+<td>该 chunk 字节数</td>
+</tr>
+<tr>
+<td><code>+0x20C</code> (= 0x28C+k*0x400)</td>
+<td><code>u32 file_offset</code></td>
+<td>该 chunk 在文件中的绝对偏移</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>加载器遍历该目录: chunk[0] 总是 YABX 容器, 随后是各 DDS, 最后是 VBO/IBO。<strong>这是定位
+文件末尾几何块的权威途径</strong> —— 无需扫描 magic, 直接读目录指针对即可。</p>
+</blockquote>
+<h3 id="32">3.2 版本差异</h3>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>YABX 起始</th>
+<th>示例文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>0x1080</td>
+<td><code>chu_barline_*.svo</code>, <code>chu_goalline_*.svo</code>, <code>chu_notesfield_*.svo</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>0x1480</td>
+<td><code>ntt_airdwtilt_*.svo</code>, <code>ntt_airuptilt_*.svo</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>0x1480</td>
+<td><code>ntt_dmg_*.svo</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="33">3.3 实测目录 (两文件验证)</h3>
+<p><strong>chu_barline_blue_v10.svo (v4)</strong> —— 解析得 4 个块:</p>
+<table>
+<thead>
+<tr>
+<th>块</th>
+<th>名字</th>
+<th>size</th>
+<th>file_offset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>…chu_barline_blue_v10.svo</code> (YABX)</td>
+<td>0x26C0</td>
+<td>0x1080</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>…chu_barline_blue_v10.dds</code> (DDS)</td>
+<td>0x880</td>
+<td>0x3780</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>…__PNT_0000.VBO</code></td>
+<td>0x60</td>
+<td>0x4000</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>…__PNT.IBO</code></td>
+<td>0x0A</td>
+<td>0x4080</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ntt_ahact_01.svo (v5)</strong> —— 解析得 5 个块:</p>
+<table>
+<thead>
+<tr>
+<th>块</th>
+<th>名字</th>
+<th>size</th>
+<th>file_offset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>…ntt_ahact_01.svo</code> (YABX)</td>
+<td>0x4180</td>
+<td>0x1480</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>…ntt_ahact_01.dds</code> (DDS, 64×64 A8R8G8B8)</td>
+<td>0x3F80</td>
+<td>0x5600</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>…ntt_ahact_eff.dds</code> (DDS, 8×64 DXT1)</td>
+<td>0x180</td>
+<td>0x9580</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>…__PNCT_0000.VBO</code></td>
+<td>0x230 (560)</td>
+<td>0x9700</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>…__PNCT.IBO</code></td>
+<td>0x3C (60)</td>
+<td>0x9980</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>两例均印证布局: <strong>YABX → DDS×N → VBO → IBO</strong>, 几何在文件最末尾。0x1080 + 0x26C0 = 0x3740
+为 barline 的 YABX 结束位置, DDS @0x3780 (中间约 0x40B 对齐)。chunk 名仍是 <code>__HndToSvo__</code>
+前缀串, 但它们是目录块的组成部分, 不是孤立名称池。</p>
+</blockquote>
+<hr />
+<h2 id="4-yabx-ida">4. YABX 容器 (★ 本次重写, 已 IDA + 字节双重验证 ★)</h2>
+<h3 id="41-yabx-header-16">4.1 YABX Header (16 字节)</h3>
+<div class="highlight"><pre><span></span><code>Offset  Size  Field          说明
+0x00    4     Magic &quot;YABX&quot;   0x58424159 (LE); 大端变体 &quot;XBAY&quot;=0x59414258 (本游戏资源均小端)
+0x04    4     version u32    固定 1
+0x08    4     payload_size   = 容器总长 - 16 (实例数据区字节数); 由 Yb_Finalize 回填
+0x0C    4     hash u32       = ~CRC32(payload) (Yb_CRC32_Table); 写入回填, **加载不校验**
+</code></pre></div>
+<blockquote>
+<p><code>Yb_ReadMagic_CreateProcessor</code> @0xE91400 仅比对 magic; <code>Yb_Finalize_PayloadSizeAndCRC</code>
+@0xE91300 用 <code>v8 = tbl[byte ^ (v8&gt;&gt;24)] ^ (v8&lt;&lt;8)</code> 迭代算 <code>~v8</code> 写回 hash。
+因加载不校验, 修改内容后无需重算 hash (与 RFZ 结论一致)。</p>
+</blockquote>
+<h3 id="42-yb_writestring_lenprefixed-0xea2bb0">4.2 字符串编码 (两种, 由 <code>Yb_WriteString_LenPrefixed</code> @0xEA2BB0 权威确定)</h3>
+<p><code>len = strlen + 1</code> (<strong>含结尾 <code>\0</code></strong>), 写法二选一:</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>编码</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>短字符串</strong> (mode≠0)</td>
+<td><code>&lt;u8 len&gt;&lt;chars\0&gt;</code></td>
+<td>schema 内的类名、字段名、命名空间名、对象 localID 名</td>
+</tr>
+<tr>
+<td><strong>长字符串</strong> (mode=0)</td>
+<td><code>&lt;u16 len&gt;&lt;chars\0&gt;</code></td>
+<td>顶层头字符串、实例数据中的名称值</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>★ <strong>这是对旧文档最重要的纠正</strong>: 旧 §4.3 把 <code>0x06/0x0a/0x11/0x21</code> 等当成语义"标记字节",
+实则它们就是 <strong>u8 长度前缀</strong>。例: <code>0x11</code> "yabukita::Object" → 0x11=17="yabukita::Object"+<code>\0</code> 长度;
+<code>0x21</code> "__HndToSvo__chu_barline_blue_v10" → 0x21=33。</p>
+</blockquote>
+<h3 id="43">4.3 顶层头 + 命名空间表</h3>
+<p>YABX header 之后 (chu_barline_blue_v10 @0x1090 起):</p>
+<div class="highlight"><pre><span></span><code>[u8 tag=0x04][u16 len][ &quot;HndToSvo/svo\0&quot; ]      ← 格式/转换器标识串 (长字符串, 但前置 1 字节 tag)
+[u8 tag=0x07][u16 len][ &quot;stevia::Database\0&quot; ]  ← 根对象类名
+[u8 0x00]                                        ← 分隔
+[u8 len][ &quot;__HndToSvo__&lt;file&gt;\0&quot; ]               ← 根对象名 (短字符串)
+── 命名空间表: 重复 &lt;短字符串名&gt;&lt;u32 id&gt;, 以 u8 0x00 终止 ──
+[u8 len][&quot;yabukita\0&quot;][u32 1005]
+[u8 len][&quot;stevia\0&quot;]  [u32 1000]
+[u8 0x00]                                        ← 命名空间表结束
+</code></pre></div>
+<blockquote>
+<p>顶层两串前各有 1 个 tag 字节 (0x04 / 0x07)；其确切语义未完全定死 (疑为根对象首两个
+字段的类型/序号标记), 但对解析无碍——长度由其后的 u16 决定。</p>
+</blockquote>
+<h3 id="44-schema">4.4 类定义 (schema / 类型注册) ★ 已端到端验证 ★</h3>
+<p>命名空间表之后是类定义序列, 每个类:</p>
+<div class="highlight"><pre><span></span><code>[u8 len][ &quot;Namespace::ClassName\0&quot; ]   ← 短字符串类名
+[u8 0x01]                              ← 记录标志 (恒 0x01 = &quot;类定义&quot;)
+[u8 base_ref]                          ← 基类的 1-based 索引 (0 = 无基类); 单继承
+[u8 0x00]                              ← 保留
+── 字段列表: 重复每字段 ──
+  [u8 len][ &quot;_fieldName\0&quot; ]           ← 短字符串字段名
+  [u8 flag]                            ← 每字段标志 (0/1, 见下)
+  [u16 inline_size]                    ← 内联值字节数 (0 = 变长 TLV)
+[u8 0x00]                              ← 字段列表结束 (零长度名前缀作哨兵)
+</code></pre></div>
+<p><strong><code>inline_size</code> (中间 u16) = 该字段在实例中内联存储的字节数</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>size</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>变长 (TLV): 字符串、对象数组、对象引用列表</td>
+</tr>
+<tr>
+<td>1</td>
+<td>bool / u8</td>
+</tr>
+<tr>
+<td>2</td>
+<td>u16 (通常是 <strong>localID 对象引用</strong>)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>u32 / s32 / f32 / 枚举</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Vector3 (3×f32)</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Vector4 / Quaternion / Color (4×f32)</td>
+</tr>
+<tr>
+<td>48</td>
+<td>Matrix3x4 (12×f32)</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>base_ref</code> (类头第二字节) = 基类 1-based 索引</strong>, 实测自洽:
+<code>Object</code>(0=无基) ← <code>Resource</code>(1→Object) ← <code>Database/State/Texture/Image/Mesh/Shape/Batch/</code>
+<code>VertexBuffer/VertexDeclaration/IndexBuffer/Tree/Node</code>(2→Resource);
+<code>Parameter/Variant/VertexElement</code>(1→Object, 轻量类直接继承 Object)。</p>
+<p><strong><code>flag</code> (每字段第一字节, 0/1)</strong>: 观测到 0 与 1 两种取值, 与具体类型无单一对应
+(同为 u32 标量, State 中 flag=1 而 Batch 中 flag=0)。疑为"可选/默认值/序列化门控"类标志,
+其精确语义需进一步逆向通用读取器; 对<strong>解析字节布局无影响</strong> (布局完全由 <code>inline_size</code> 决定)。</p>
+<h3 id="45-stevia-chu_barline_blue_v10svo-schema-19">4.5 完整 stevia 类层次与字段表 (从 chu_barline_blue_v10.svo schema 提取, 19 个类)</h3>
+<blockquote>
+<p>格式: <code>字段名 (size)</code>; size=2 标注为 <code>→localID</code>, size=0 标注为 <code>[TLV]</code>。</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>yabukita::Object                       (无基, 0 字段)
+stevia::Resource : Object              _name[TLV] _flag(4) _fullName[TLV] _userParameter[TLV]
+stevia::Database : Resource            _state[TLV] _mesh[TLV] _batch[TLV] _vertexBuffer[TLV]
+                                       _indexBuffer[TLV] _vertexDeclaration[TLV] _texture[TLV]
+                                       _image[TLV] _tree[TLV]
+stevia::State : Resource               _fillType(4) _alphaRef(4) _depthBias(4) _depthBiasSlope(4)
+                                       _cullMode(4) _transparentDoubleSide(1) _lighting[TLV]
+                                       _maxInfluence(4) _uvSet(4) _blendOperation(4)
+                                       _blendFactorSrc(4) _blendFactorDst(4) _shaderName[TLV]
+                                       _texture[TLV] _textureRef[TLV]
+stevia::Texture : Resource             _wrapU(4) _wrapV(4) _minFilter(4) _magFilter(4) _mipFilter(4)
+                                       _anisoNumber(4) _lodBias(4) _id(4) _uvSetIndex(4)
+                                       _uvSetName[TLV] _attributeName[TLV] _textureType[TLV]
+                                       _image→localID(2)
+stevia::Image : Resource               _height(4) _width(4) _maxMipmapLevel(4) _format(4)
+                                       _compressCustomOption[TLV] _alphaMode(4) _fileName[TLV]
+                                       _chunkFileName[TLV] _file→localID(2) _mipmapFileName[TLV]
+                                       _dataSize(4)
+stevia::Parameter : Object             _name[TLV] _value→localID(2) _userID(4)
+stevia::Variant : Object               _variantType(4) _valueF32(4) _valueS32(4)
+                                       _valueColor(16) _valueString[TLV]
+stevia::Mesh : Resource                _shape[TLV] _sortGroup(4)
+stevia::Shape : Resource               _state→localID(2) _batch→localID(2) _boundingSphere(16)
+                                       _boundingBoxCenter(12) _boundingBoxSize(12)
+                                       _sortDistanceOffset(4) _blendTargetName[TLV]
+                                       _blendTargetBindMatrix[TLV] _meshBindMatrix(48)
+stevia::Batch : Resource               _polygonNumber(4) _primitiveType(4) _primitiveNumber(4)
+                                       _indexStart(4) _indexNumber(4) _startNumber(4) _endNumber(4)
+                                       _vertexNumber(4) _vertexBufferList[TLV] _indexBuffer→localID(2)
+stevia::VertexBuffer : Resource        _vertexNumber(4) _dataSize(4) _chunkFileName[TLV] _stride(4)
+                                       _vertexDeclaration→localID(2) _billboardType(4)
+stevia::VertexDeclaration : Resource   _vertexElement[TLV]
+stevia::VertexElement : Object         _semantics(4) _elementType(4) _index(4)
+stevia::IndexBuffer : Resource         _indexNumber(4) _chunkFileName[TLV] _indexType(4)
+stevia::Tree : Resource                _blendTargetNumber(4) _node[TLV]
+stevia::Node : Resource                _mesh→localID(2) _parent→localID(2) _child→localID(2)
+                                       _sibling→localID(2) _blendIndex(4) _scale(12) _rotation(12)
+                                       _quaternion(16) _translation(12) _mtxLocal(48) _mtxWorld(48)
+                                       _mtxWorldInv(48) _mtxBind(48)
+</code></pre></div>
+<blockquote>
+<p>注意 <code>_rotation</code> size=12 (Vector3 欧拉角) 而 <code>_quaternion</code> size=16 (四元数), 两者并存。
+场景图通过 <code>_mesh/_parent/_child/_sibling</code> 的 u16 localID 引用构成树。</p>
+</blockquote>
+<h3 id="46">4.6 实例数据语法 (★ 本次深入逆向, 已逐字节验证 ★)</h3>
+<p>类定义结束后是对象实例区。<strong>每个对象记录</strong>的帧格式 (与 RFZ ruhuna 实例同构):</p>
+<div class="highlight"><pre><span></span><code>[u16 class_tag][u32 body_size][body … body_size 字节]
+</code></pre></div>
+<blockquote>
+<p>★ <strong>本次纠正 (三国志大战大模型验证)</strong>: <code>class_tag</code> <strong>不是固定的 3</strong>, 而是该对象类的
+<strong>1-based schema 索引</strong> (与 §4.4 的 base_ref 同一编号体系)。即 <code>class_tag = 类在 schema 中
+的 0-based 序号 + 1</code>。实测: Database(idx2)→3, State(idx3)→4, Texture(idx4)→5, Image(idx5)→6,
+Parameter(idx6)→7, Variant(idx7)→8。barline 根对象 tag=3 只是因为 Database 恰好是 idx2。
+解析器据此 tag 即可定位对象的类与字段布局。</p>
+<p>实例区在 schema 之后, 先有 4 字节引导 <code>&lt;u16 0&gt;&lt;u16 object_count&gt;</code> (object_count = 总对象数,
+如 m107=406), 随后是 object_count 个对象记录, 末尾可能有 1~5 字节对齐填充至 payload 边界。</p>
+</blockquote>
+<p><strong>字段序列化顺序 = 派生类字段在前, 基类字段在后</strong> (每一继承层按 schema 声明序输出)。
+即与 §4.5 schema 的"派生→基"链反向展开。barline 根 <code>Database</code> 体 (152B) 逐字段:</p>
+<table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>来源类</th>
+<th>字段</th>
+<th>编码</th>
+<th>字节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Database</td>
+<td>9 个类型化数组 (_state.._tree)</td>
+<td>每个 ref-list</td>
+<td>90</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Resource</td>
+<td>_name</td>
+<td>TLV 字符串</td>
+<td>25</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Resource</td>
+<td>_flag</td>
+<td>u32 内联</td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Resource</td>
+<td>_fullName</td>
+<td>TLV 字符串</td>
+<td>25</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Resource</td>
+<td>_userParameter</td>
+<td>ref-list</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+<p>合计 90+25+4+25+8 = <strong>152</strong> ✓ 精确闭合。</p>
+<p><strong>字段值三种编码</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>编码</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内联标量</td>
+<td><code>inline_size</code> 字节原值</td>
+<td>4=u32/f32, 2=u16 localID, 1=bool, 12/16/48=向量/矩阵</td>
+</tr>
+<tr>
+<td>TLV 字符串</td>
+<td><code>&lt;u32 size&gt;&lt;u16 strlen+1&gt;&lt;chars\0&gt;</code></td>
+<td>size = strlen+2</td>
+</tr>
+<tr>
+<td>对象引用列表</td>
+<td><code>&lt;u32 size&gt;&lt;u32 count&gt;&lt;count × u16 localID&gt;</code></td>
+<td>size = 4 + 2*count</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>引用列表 count=1 时呈 <code>06 00 00 00 01 00 00 00 &lt;u16 localID&gt;</code> —— 即旧文档误认的
+"localID 表头" 实为单元素引用列表。</p>
+<p><strong>变长字段 (size=0) 的字符串/引用列表判别</strong> (解析器实测可靠): 读 <code>&lt;u32 tlv_size&gt;</code> 后,
+偷看其后 u32 <code>n</code>; 若 <code>tlv_size == 4 + 2*n</code> 则为引用列表 (<code>n</code> 个 u16 localID), 否则为
+TLV 字符串 (<code>&lt;u16 strlen+1&gt;&lt;chars\0&gt;</code>)。该启发式在三国志大战全部对象上零误判。</p>
+<p><strong>localID 基址随文件而变</strong>: barline 基址 0x2712(=10002); 三国志大战 m107 的引用为
+10002/10153/10304… (基址 ~10000)。基址是 yabukita 运行时分配的对象句柄起点, 解析时
+应以"实例区中第 k 个被创建对象 → 句柄 base+k"的方式动态建表, 不要硬编码 0x2712。</p>
+<p><strong>★ 全树解析验证 (2026-06-14)</strong>: 上述语法 (class_tag=类索引+1 / 派生→基字段序 /
+三种编码) 已在三国志大战 6 个文件 (174~792 对象, 含蒙皮角色) 上<strong>逐对象、逐字段端到端走通</strong>,
+每个对象体长度精确闭合 (consumed==body_size), 解析终点恰好落在 payload 边界 (±1~5B 对齐填充)。
+解出的材质参数 (ambient=[0.3,0.3,0.3,1] / diffuse=[0.7,0.7,0.7,1])、贴图 (512×512 format10)、
+Image/Texture 配置均语义合理。<strong>SVO 实例层已具备完整可逆解析能力。</strong></p>
+</blockquote>
+<p><strong>localID → 类映射</strong> (从根 Database 的 9 个类型化数组推得, barline; localID 基址 0x2712):</p>
+<table>
+<thead>
+<tr>
+<th>localID</th>
+<th>类</th>
+<th>localID</th>
+<th>类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x2712</td>
+<td>State</td>
+<td>0x27A4</td>
+<td>VertexBuffer</td>
+</tr>
+<tr>
+<td>0x2713</td>
+<td>Texture</td>
+<td>0x27A5</td>
+<td>VertexDeclaration</td>
+</tr>
+<tr>
+<td>0x2714</td>
+<td>Image</td>
+<td>0x27A9</td>
+<td>IndexBuffer</td>
+</tr>
+<tr>
+<td>0x27A1</td>
+<td>Mesh</td>
+<td>0x27AA</td>
+<td>Tree</td>
+</tr>
+<tr>
+<td>0x27A3</td>
+<td>Batch</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>localID 是对象数组内的句柄, 字段中的 u16 引用 (size=2) 据此解析对象指针。基址 0x2712
+与 RFZ 字体 glyph localID 同源 (yabukita 通用机制)。</p>
+</blockquote>
+<hr />
+<h2 id="5-vbo-ibo">5. 几何数据块 (VBO / IBO)</h2>
+<p><code>stevia::VertexBuffer._chunkFileName</code> / <code>IndexBuffer._chunkFileName</code> 是名称池里的
+<code>__HndToSvo__…__PNT_NNNN.VBO</code> / <code>…__PNT.IBO</code> 串, 指向文件后段的原始几何数据块。
+<code>_stride</code> (顶点步长)、<code>_vertexNumber</code>、<code>_dataSize</code>、<code>_indexNumber</code>、<code>_indexType</code> 等
+度量均在 schema 实例里 (按 §4.4 内联)。</p>
+<p><strong>IndexType 枚举</strong>: 2 = UINT16 (2B/索引), 4 = UINT32 (4B/索引)。</p>
+<blockquote>
+<p><strong>简单模型 (barline/goalline/notesfield, 4 顶点平面)</strong>: 旧文档曾推测其 VBO/IBO 运行时
+程序化生成。结合 schema, 更准确的说法是: 这些模型仍有 VertexBuffer/IndexBuffer 对象与
+<code>__PNT_0000.VBO/__PNT.IBO</code> chunk 名, 几何数据块体量很小 (4 顶点 × stride)。</p>
+</blockquote>
+<h3 id="51-vertexelement">5.1 VertexElement 语义 / 类型 (推断自实例枚举值)</h3>
+<p><strong>_semantics</strong> (VertexInputSemantics): 0=POSITION, 3=NORMAL, 5=TEXCOORD, 8=COLOR。
+<strong>_elementType</strong> (VertexElementType): 0=FLOAT1, 1=FLOAT2, 2=FLOAT3, 3=FLOAT4, 8=UBYTE4。</p>
+<h3 id="52-chunk-__pnt__pnct-stride">5.2 顶点格式一览 (从 chunk 名 <code>__PNT/__PNCT</code> 等推断 + 实测 stride)</h3>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>Stride</th>
+<th>布局</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PNT</code></td>
+<td>32B</td>
+<td>P(f3=12)+N(f3=12)+T(f2=8)</td>
+<td>barline, goalline, notesfield</td>
+</tr>
+<tr>
+<td><code>PNCT</code></td>
+<td><strong>28B</strong> (实测)</td>
+<td>P(f3=12)+N/C(打包 UBYTE4)+T</td>
+<td>ntt_ahact, ntt_airdwtilt</td>
+</tr>
+<tr>
+<td><code>PNBTW</code> / <code>PNBTWW</code></td>
+<td>变</td>
+<td>P+N+<strong>B(骨骼索引)</strong>+T+<strong>W(权重)</strong></td>
+<td>三国志大战角色 (蒙皮)</td>
+</tr>
+<tr>
+<td><code>PNBCTW</code> / <code>PNBCTWW</code></td>
+<td>变</td>
+<td>P+N+B+C(色)+T+W</td>
+<td>三国志大战带顶点色角色</td>
+</tr>
+<tr>
+<td><code>P</code>/<code>PN</code>/<code>PT</code></td>
+<td>12/24/20B</td>
+<td>见名</td>
+<td>简单/无贴图/无光照模型</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>★ <strong>三国志大战角色模型为蒙皮网格</strong>: chunk 名出现 <code>B</code>(Blend/骨骼索引) 与 <code>W</code>(Weight/权重)
+字段 (如 <code>PNBTWW_0000.VBO</code>), 配合 Node 树 (§4.5/§14.1) 的 <code>_mtxBind</code> 构成完整骨骼蒙皮。
+单文件常有多个 VBO (不同子网格用不同顶点格式, 如 body_m106 = PNBTW + PNBTWW 两段)。
+各字段精确偏移/类型由该 VBO 对应的 <code>VertexDeclaration._vertexElement[]</code>
+(每元素 _semantics/_elementType/_index) 权威给出 —— 解析时读 schema 实例即可, 无需猜测。</p>
+<p>★ PNCT stride 实测为 <strong>28</strong>(ahact: 560/20=28), 非旧文档推测的 36。28B = 7×f32, 法线与
+顶点色以打包形式 (UBYTE4) 占用, 颜色字节实测 0xFFFFFFFF (全白可见)。28 字节的法线/色/UV
+精确子布局尚未完全定死 (见 §12), 但 Position(f3) 与 TexCoord 已可正确解出。</p>
+</blockquote>
+<h3 id="53-ntt_ahact_01">5.3 真实几何解码实例 (★ ntt_ahact_01, 已端到端解出 ★)</h3>
+<p>由 §3 AVTS 目录定位到 VBO@0x9700(560B) / IBO@0x9980(60B), 结合 schema 实例度量:</p>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>字段</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VertexBuffer</td>
+<td>_vertexNumber</td>
+<td>20</td>
+</tr>
+<tr>
+<td></td>
+<td>_dataSize</td>
+<td>560 (= 20 × 28 ✓)</td>
+</tr>
+<tr>
+<td></td>
+<td>_stride</td>
+<td>28 (PNCT)</td>
+</tr>
+<tr>
+<td></td>
+<td>_vertexDeclaration</td>
+<td>localID 0x2834</td>
+</tr>
+<tr>
+<td></td>
+<td>_billboardType</td>
+<td>0</td>
+</tr>
+<tr>
+<td>IndexBuffer</td>
+<td>_indexNumber</td>
+<td>30</td>
+</tr>
+<tr>
+<td></td>
+<td>_indexType</td>
+<td>2 (UINT16) → 30×2 = 60B ✓</td>
+</tr>
+</tbody>
+</table>
+<p><strong>IBO 索引</strong> (30 个 u16 @0x9980):
+<code>0,2,4,5,4,10,1,6,6,9,9,7,11,10,11,5,11,3,8,13,14,12,18,16,19,17,15,13,14,14</code>。</p>
+<blockquote>
+<p>索引含退化三角形 (重复对 6,6 / 9,9 / 14,14) → 这是 <strong>三角形带 (TRIANGLE_STRIP)</strong> 的
+缝合标志, 用退化三角形把多条带子接成一个绘制调用。20 顶点 / 30 索引 ≈ 10 个三角形。
+Position 解出为合法 3D 坐标 (非噪声), 证实顶点格式与定位均正确。
+ahact_01 与 ahact_05 几何完全相同 (同一 YABX payload), 仅贴图尺寸不同。</p>
+</blockquote>
+<hr />
+<h2 id="6-dds">6. DDS 贴图段</h2>
+<h3 id="61">6.1 位置与提取</h3>
+<p>所有 DDS 紧随 YABX 容器+几何块之后, 连续存放无间隔。提取: 搜 <code>"DDS "</code> magic →
+校验 <code>dwSize==124</code> → 读 <code>dwHeight/dwWidth/dwPitchOrLinearSize</code> → <code>128 + linearSize</code>
+(或按 FourCC/位深算 mip 链) 切出完整 DDS → 跳至下一个。</p>
+<h3 id="62-dds-128b-ddsurfacedesc2">6.2 DDS 头 (128B, 标准 DDSURFACEDESC2)</h3>
+<div class="highlight"><pre><span></span><code>0x00 &quot;DDS &quot;  0x04 dwSize=124  0x0C dwHeight  0x10 dwWidth  0x14 dwPitchOrLinearSize
+0x1C dwMipMapCount  0x4C PF.dwSize=32  0x54 dwFourCC  0x58 dwRGBBitCount  …位掩码…
+0x80 像素数据
+</code></pre></div>
+<h3 id="63">6.3 已知格式</h3>
+<table>
+<thead>
+<tr>
+<th>dwFourCC</th>
+<th>说明</th>
+<th>块/像素大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DXT1</code></td>
+<td>BC1, 1-bit alpha</td>
+<td>8B/块</td>
+</tr>
+<tr>
+<td><code>DXT5</code></td>
+<td>BC3, 8-bit alpha</td>
+<td>16B/块</td>
+</tr>
+<tr>
+<td>0 (DDPF_RGB|ALPHAPIXELS)</td>
+<td>A8R8G8B8 未压缩</td>
+<td>w×h×4</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>RFZ 字体内嵌 SVO 的纹理用的是 ARGB4444 (16bpp); SVO 模型贴图多为 DXT5 / A8R8G8B8 / DXT1。</p>
+</blockquote>
+<h3 id="64">6.4 文件名关联</h3>
+<p><code>stevia::Image._fileName</code> = <code>&lt;name&gt;.dds</code>, <code>._chunkFileName</code> = <code>__HndToSvo__&lt;name&gt;.dds</code>;
+<code>Texture._image</code> 经 u16 localID 关联到渲染状态。DDS 在文件中的出现顺序 = Image 对象定义顺序。</p>
+<hr />
+<h2 id="7">7. 版本差异汇总</h2>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>YABX 起始</th>
+<th>典型大小</th>
+<th>贴图数</th>
+<th>顶点格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4 (早)</td>
+<td>0x1080</td>
+<td>16-33KB</td>
+<td>1</td>
+<td>PNT</td>
+</tr>
+<tr>
+<td>4 (中)</td>
+<td>0x1080</td>
+<td>90-100KB</td>
+<td>2</td>
+<td>PNCT</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0x1480</td>
+<td>90-100KB</td>
+<td>2</td>
+<td>PNCT</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0x1480</td>
+<td>200KB+</td>
+<td>3</td>
+<td>PNCT (推测)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8">8. 枚举值参考 (推断自实例数据)</h2>
+<table>
+<thead>
+<tr>
+<th>枚举</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PrimitiveType</td>
+<td>3=TRIANGLE_LIST, 4=TRIANGLE_STRIP</td>
+</tr>
+<tr>
+<td>CullMode</td>
+<td>0=NONE, 1=FRONT, 2=BACK</td>
+</tr>
+<tr>
+<td>BlendFactor</td>
+<td>0=ZERO,1=ONE,2=SRC_COLOR,3=INV_SRC_COLOR,4=SRC_ALPHA,5=INV_SRC_ALPHA</td>
+</tr>
+<tr>
+<td>BlendOperation</td>
+<td>0=ADD,1=SUB,2=REV_SUB,3=MIN,4=MAX</td>
+</tr>
+<tr>
+<td>FillType</td>
+<td>0=SOLID,1=WIREFRAME,2=POINT</td>
+</tr>
+<tr>
+<td>WrapMode</td>
+<td>0=REPEAT,1=CLAMP,2=MIRROR</td>
+</tr>
+<tr>
+<td>FilterMode</td>
+<td>0=POINT,1=LINEAR,2=ANISOTROPIC</td>
+</tr>
+<tr>
+<td>IndexType</td>
+<td>2=UINT16,4=UINT32</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-steviaparameter-variant">9. 材质参数列表 (stevia::Parameter / Variant, 名称池实测)</h2>
+<p>材质参数以 <code>stevia::Parameter</code>(<code>_name</code>/<code>_value</code>→Variant/<code>_userID</code>) + <code>stevia::Variant</code>
+(<code>_variantType</code>/<code>_valueF32</code>/<code>_valueS32</code>/<code>_valueColor</code>(16B)/<code>_valueString</code>) 表达。
+变体类型 <code>_variantType</code> 区分 f32 / s32 / color(vec4) / string。</p>
+<h3 id="91">9.1 基础光照</h3>
+<p><code>ambient</code>/<code>diffuse</code>/<code>emissive</code>/<code>specular</code> (vec4 color), <code>shininess</code>/<code>opacity</code> (f32)。</p>
+<h3 id="92-sega-sea">9.2 SEGA 引擎参数 (<code>sea*</code>, 名称池实测)</h3>
+<p><code>seaShaderType seaMaterialId seaBaseMapType seaDetailMap/Blend/Scale/Distance
+seaAlphaSort seaEdgeAlpha[/Bias/Power/Scale] seaEnvironmentMapType seaExtUvScroll
+seaIncandescenceMapType seaRamp seaReduction seaRimLightRate seaRimColor seaRimPow
+seaSoftEdge seaSpecularMapType seaUseFresnel seaVertexShake</code> (其余见名)。</p>
+<h3 id="93-ts">9.3 双层/卡通着色 (<code>ts*</code>, 名称池实测)</h3>
+<p><code>tsShaderType tsDiffuseScale tsSpecularScale tsNormalMapType/Scale
+tsDirectionLightingColor/Direction tsHemisphereLightingSky/Ground/Direction
+tsLayerBlendFunction[2] tsLayerBlendFactorSrc[2]/Dst[2] tsEnableUVOffset tsEnableVertexColor
+tsUVScrollUV0/1/2 tsUVScrollNormal/Specular/Incandescence tsIncandescenceScale
+tsShadowCaster/Receiver tsPointLightingMode tsMaterialAnimation tsGlobalEnvironmentMap
+tsVisibleToCamera/Reflection tsRoughness tsScatteringScale tsUserShader</code>。</p>
+<h3 id="94-rdcp">9.4 <code>rdcp*</code> 参数 (名称池实测)</h3>
+<p><code>rdcpColorAmp rdcpLightingType rdcpMultiTexType rdcpRamp rdcpRim rdcpRimColor rdcpRimPow</code>。</p>
+<hr />
+<h2 id="10">10. 文件偏移快速参考</h2>
+<h3 id="101-chu_barline_blue_v10svo-v4-16640b">10.1 chu_barline_blue_v10.svo (v4, 16,640B) — 已逐字节核对</h3>
+<table>
+<thead>
+<tr>
+<th>偏移</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x0000</td>
+<td><code>AVTS</code> + version=4</td>
+</tr>
+<tr>
+<td>0x0080</td>
+<td>AVTS chunk 目录 (块0=YABX, 块1=DDS, 块2=VBO, 块3=IBO; stride 0x400)</td>
+</tr>
+<tr>
+<td>0x0288</td>
+<td>块0 指针对: size 0x26C0 / offset 0x1080 (YABX)</td>
+</tr>
+<tr>
+<td>0x1080</td>
+<td>YABX header (payload 0x26B0, hash 0x34F21EDB)</td>
+</tr>
+<tr>
+<td>0x1090</td>
+<td>顶层头 + 命名空间表</td>
+</tr>
+<tr>
+<td>0x10F2</td>
+<td>类定义区 (19 类: yabukita::Object … stevia::Node)</td>
+</tr>
+<tr>
+<td>0x1912</td>
+<td>类定义结束 → 实例区 (对象帧 <u16 3><u32 size><body>)</td>
+</tr>
+<tr>
+<td>0x3780</td>
+<td>DDS 贴图 (A8R8G8B8)</td>
+</tr>
+<tr>
+<td>0x4000</td>
+<td>VBO 几何块 (文件末尾); 0x4080: IBO</td>
+</tr>
+</tbody>
+</table>
+<h3 id="102-ntt_airdwtilt_01svo-v5-97kb">10.2 ntt_airdwtilt_01.svo (v5, ~97KB)</h3>
+<table>
+<thead>
+<tr>
+<th>偏移</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x0000</td>
+<td><code>AVTS</code> + version=5</td>
+</tr>
+<tr>
+<td>0x1480</td>
+<td>YABX header</td>
+</tr>
+<tr>
+<td>(后段)</td>
+<td>数据/几何 + DDS #1 (A8R8G8B8) + DDS #2 (DXT1)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="11-svo_viewerpy">11. 解析流程 (供 svo_viewer.py 参考)</h2>
+<div class="highlight"><pre><span></span><code>1. 校验 &quot;AVTS&quot; + 读 version
+2. 解析 AVTS chunk 目录 (§3): 从 k=0 起, 块基址 0x80+k*0x400,
+   读 name@+0x00 / size@+0x208 / file_offset@+0x20C, 直到越过 YABX 起始
+   → 得到 YABX / DDS×N / VBO / IBO 各 chunk 的精确 (offset,size)
+3. 解析 YABX (chunk[0]): 读 16B header (payload_size / hash)
+   a. 顶层头 (tag+长串 ×2, 0x00, 短串根对象名)
+   b. 命名空间表 (&lt;短串&gt;&lt;u32 id&gt;… 直到 0x00)
+   c. 类定义区: 循环 &lt;短串类名&gt;&lt;01&gt;&lt;base_ref&gt;&lt;00&gt; + 字段(&lt;短串名&gt;&lt;u8 flag&gt;&lt;u16 size&gt;)… &lt;00&gt;
+   d. 实例区: 每对象 &lt;u16 tag=3&gt;&lt;u32 body_size&gt;&lt;body&gt;; body 按&quot;派生→基&quot;序解字段
+      (内联标量 / TLV 字符串 / ref-list &lt;u32 size&gt;&lt;u32 count&gt;&lt;u16 ids&gt;)
+4. 用目录里的 VBO/IBO chunk (位于文件末尾) 配合实例的 _stride/_vertexNumber/
+   _indexType 解出顶点/索引几何
+5. 用目录里的 DDS chunk 直接切出贴图 (亦可搜 &quot;DDS &quot; magic 校验)
+</code></pre></div>
+<hr />
+<h2 id="12">12. 待进一步逆向 (诚实标注)</h2>
+<ul>
+<li><strong>每字段 <code>flag</code> (0/1) 精确语义</strong>: 需逆向通用 yabukita <strong>读取器</strong> (schema → 类型树构建)。
+  当前已知它<strong>不影响字节布局</strong> (布局由 inline_size 决定), 故不阻碍解包。</li>
+<li><strong>顶层两个 tag 字节 (0x04/0x07)</strong>: 疑为根对象首两字段的类型/序号标记, 待读取器确认。</li>
+<li><strong>实例区精确字段顺序与对齐</strong>: 已确认与 ruhuna RFZ 实例同构 (TLV + 内联标量 + localID),
+  但 SVO 的多对象数组 (_mesh/_node[] 等) 嵌套展开顺序尚未逐字节走完全部对象。</li>
+<li><strong>AVTS 名称池内其余固定偏移指针</strong> (除 0x288/0x28C 外是否还有) 未穷举。</li>
+</ul>
+<blockquote>
+<p>旧文档 §1.1 提到的 <code>ceylon::resource::SVOLoader</code> / <code>air::SbSvoFileLoader</code> 等类名
+来自早期符号/字符串检索, 本次未在 IDB 中以去修饰 C++ 名复核 (func_query 无命中),
+暂保留为线索, 不作为已证实结论。</p>
+</blockquote>
+<hr />
+<h2 id="14-svo">14. SVO 的完整用途 (★ 回答"是否只存贴图+模型" ★)</h2>
+<p><strong>结论: 否。SVO 是一个完整的 3D 场景容器 (full scene graph asset)</strong>, 而不仅是
+"一张贴图 + 一堆顶点"。从 §4.5 的 19 类 schema 可知, 单个 .svo 自包含以下全部信息:</p>
+<h3 id="141-tree-node">14.1 场景图 / 骨骼层级 (Tree / Node)</h3>
+<p><code>stevia::Tree</code> 持有 <code>_node[]</code> 列表; 每个 <code>stevia::Node</code> 用 <code>_parent/_child/_sibling</code>
+(u16 localID) 构成树状层级, <code>_mesh</code> 引用挂在该节点的网格。每节点携带独立变换:
+<code>_scale(vec3) / _rotation(欧拉vec3) / _quaternion(vec4) / _translation(vec3)</code>
+以及 4 个矩阵 <code>_mtxLocal / _mtxWorld / _mtxWorldInv / _mtxBind(各 4×3)</code>。
+→ 这就是<strong>骨骼/关节体系</strong>, 支持层级动画与世界/局部空间变换。</p>
+<h3 id="142-skinning">14.2 蒙皮 (Skinning)</h3>
+<p><code>Node._mtxBind</code> (绑定姿势逆矩阵) + <code>State._maxInfluence</code> (每顶点最大骨骼影响数)
+构成标准蒙皮管线所需数据。顶点经 mtxBind 反变换到骨骼空间, 按影响权重混合。</p>
+<h3 id="143-morph-blend-shape">14.3 Morph / Blend-Shape (形变目标)</h3>
+<p><code>Shape._blendTargetName</code> / <code>_blendTargetBindMatrix</code>, <code>Tree._blendTargetNumber</code>,
+<code>Node._blendIndex</code> —— 一套混合形变 (表情/形状插值) 数据。</p>
+<h3 id="144-state-parametervariant">14.4 完整材质 / 着色器系统 (State + Parameter/Variant)</h3>
+<p><code>stevia::State</code> 描述渲染状态 (混合因子/剔除/深度偏移/Alpha 参考/着色器名…),
+并通过 <code>stevia::Parameter</code>(名→Variant) + <code>stevia::Variant</code>(f32/s32/color/string)
+携带 <strong>100+ 着色器参数</strong> (§9: <code>sea*</code>/<code>ts*</code>/<code>rdcp*</code> 系列), 覆盖 UV 滚动、轮廓光、
+菲涅尔、环境贴图、卡通分层混合等。→ SVO 自带完整外观, 不依赖外部材质文件。</p>
+<h3 id="145-texture-image">14.5 贴图采样配置 (Texture / Image)</h3>
+<p><code>Texture</code> 携带 wrap/filter/aniso/lodBias/uvSet 等采样器状态; <code>Image</code> 携带
+height/width/format/mipmap/alphaMode 及 <code>_chunkFileName</code> 指向内嵌 DDS。</p>
+<h3 id="146">14.6 包围体与渲染排序 (剔除 / 排序)</h3>
+<p><code>Shape._boundingSphere(球) + _boundingBoxCenter/_boundingBoxSize(盒)</code> 供视锥剔除;
+<code>Mesh._sortGroup + Shape._sortDistanceOffset</code> 控制渲染排序;
+<code>VertexBuffer._billboardType</code> 控制公告板朝向。</p>
+<h3 id="147-mesh-batch-vertexbuffer-indexbuffer-vertexdeclaration">14.7 几何 (Mesh / Batch / VertexBuffer / IndexBuffer / VertexDeclaration)</h3>
+<p>绘制批次 (primitiveType/indexStart/indexNumber)、顶点缓冲 (stride/格式声明)、
+索引缓冲 (UINT16/32)。真实数据块 (VBO/IBO) 在文件末尾, 由 AVTS 目录定位 (§3/§5)。</p>
+<blockquote>
+<p><strong>一句话</strong>: .svo ≈ 一个微型 FBX/glTF —— 节点层级 + 蒙皮 + morph + 材质/着色器 +
+采样器 + 包围体 + 排序 + 几何 + 内嵌纹理, 全部打包在一个文件里。贴图和网格只是其中两块。
+大文件体量主要来自 DDS 纹理; 几何与场景图数据本身很小 (YABX payload 通常 ~16KB)。</p>
+</blockquote>
+<hr />
+<h2 id="15-svo-fontfont_svo_packpy-2026-06-14">15. 字体纹理 SVO 生成器 (<code>font/font_svo_pack.py</code>, 2026-06-14, 逐字节验证)</h2>
+<p>RFZ 字体的纹理段 (见 <code>rfz_unpack_spec.md §4.0</code>) 是一个<strong>完整内嵌的 svo 容器</strong>, 由资产管线
+<code>HmfToSvo</code> 工具生成。它是 svo 的一个<strong>退化特例</strong>: 只含纹理 (Texture+Image), <strong>无任何几何</strong>
+(VBO/IBO 缺席, VertexDeclaration/VertexElement 为空声明)。<code>font_svo_pack.py</code> 是该容器的
+<strong>可参数化重建器</strong>, 支持任意页数 / 任意字体名 (旧 <code>rfz_pack.py</code> 只能整段模板复制纹理段)。</p>
+<blockquote>
+<p><strong>验证</strong>: 对 14pt (2 页, AVTS v3) 与 240pt (1 页, AVTS v2) 两套源资产,
+<code>build_font_svo()</code> 产物与原始 <code>texture.svo</code> <strong>逐字节一致</strong> (内置 <code>--selftest</code>)。</p>
+</blockquote>
+<h3 id="151-localid-10001">15.1 对象布局 (localID 自 10001)</h3>
+<table>
+<thead>
+<tr>
+<th>localID</th>
+<th>class_tag</th>
+<th>类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10001</td>
+<td>3</td>
+<td>stevia::Database</td>
+<td>根; <code>_texture</code>/<code>_image</code>/<code>_vertexDeclaration</code> reflist</td>
+</tr>
+<tr>
+<td>10002</td>
+<td>4</td>
+<td>stevia::VertexDeclaration "P"</td>
+<td>空 <code>_vertexElement</code></td>
+</tr>
+<tr>
+<td>10003</td>
+<td>5</td>
+<td>stevia::VertexElement</td>
+<td>固定空声明</td>
+</tr>
+<tr>
+<td>10004</td>
+<td>4</td>
+<td>stevia::VertexDeclaration "PN"</td>
+<td>空</td>
+</tr>
+<tr>
+<td>10005/10006</td>
+<td>5</td>
+<td>stevia::VertexElement ×2</td>
+<td>固定空声明</td>
+</tr>
+<tr>
+<td>10007+2p</td>
+<td>6</td>
+<td>stevia::Texture (页 p)</td>
+<td><code>_image</code>→Image; 采样器状态全默认</td>
+</tr>
+<tr>
+<td>10008+2p</td>
+<td>7</td>
+<td>stevia::Image (页 p)</td>
+<td><code>_format=3</code>(ARGB4444), <code>_alphaMode=2</code>, <code>_flag=2</code>, <code>_dataSize</code>=DDS 字节数</td>
+</tr>
+</tbody>
+</table>
+<p>VD/VE 这 5 个空对象 (实例 #1..#5) 是 <code>HmfToSvo</code> 工具恒发出的固定块, 各字体一致
+(脚本以 146B base64 模板内嵌)。schema 区 (namespaces + 7 类定义) 同样字体无关, 以 787B base64 内嵌。</p>
+<h3 id="152-34">15.2 ★ 本次新确认的三处字节级细节 (旧 §3/§4 未覆盖) ★</h3>
+<ol>
+<li><strong>空字符串编码</strong> (补充 §4.2): 空串 = <code>u32(2) + u16(0)</code> (inner 仅 2 字节, <strong>无</strong> <code>\0</code> 末尾);
+   非空串才是 <code>u32(L+3) + u16(L+1) + chars + \0</code>。Texture 的 <code>_uvSetName</code>/<code>_attributeName</code>、
+   Image 的 <code>_compressCustomOption</code> 等空字段均用前者。</li>
+<li><strong>内层 YABX payload 对齐</strong>: payload 末尾补零, 使 <code>(16 头 + payload)</code> 向上对齐到 <strong>0x20</strong>。
+   补零<strong>计入</strong> <code>payload_size</code>(+0x08) 与 hash 的 CRC 覆盖范围。
+   实测: 14pt payload 1984→2000 (补 16), 240pt 1588→1616 (补 28)。</li>
+<li><strong>AVTS 目录条目的额外字段</strong> (补充 §3.1, 旧文档只记 size@+0x208/offset@+0x20C):</li>
+<li><code>+0x200</code> u32 = <strong>kind</strong>: 内层 YABX=0, DDS 数据块=1。</li>
+<li><code>+0x204</code> u32 = <strong>chunk 序号</strong>: YABX=0, DDS 页=1,2,...。
+   YABX 块这两字段恒为 0, 故旧文档未察觉。</li>
+</ol>
+<h3 id="153-hash-crc-32bzip2">15.3 hash = CRC-32/BZIP2</h3>
+<p>内层 YABX 的 hash(+0x0C) 经验证为 <strong>CRC-32/BZIP2</strong>(非反射, poly 0x04C11DB7,
+init 0xFFFFFFFF, MSB-first, 末取反), 覆盖含对齐补零的整个 payload。
+游戏仅当启动标志 bit2 置位才校验 (<code>sub_E91CC0</code> @ 大四应用.exe), 默认跳过, 但本器恒填正确值。</p>
+<h3 id="154-body">15.4 字段编码速查 (实例 body 内)</h3>
+<div class="highlight"><pre><span></span><code>reflist : u32(4+2n) + u32(n) + n×u16(localID)        # 空表 = u32(4)+u32(0)
+空串    : u32(2) + u16(0)
+非空串  : u32(L+3) + u16(L+1) + chars + \0
+u32     : 4 字节内联
+ref     : u16 (localID)
+对象帧  : u16(class_tag) + u32(body_size) + body
+实例区头: u16(lead_a=0) + u16(obj_count=6+2×页数)
+</code></pre></div>
+<h3 id="155">15.5 用法</h3>
+<div class="highlight"><pre><span></span><code>python font_svo_pack.py &lt;font_base&gt; &lt;page0.dds&gt; [page1.dds ...] [-o out.svo]
+  font_base 例: RFO_SEGAKAKUGOTHIC_DB_14pt  (= RHFONTDB 资源基名, 非 metadata.name)
+python font_svo_pack.py --selftest &lt;unpacked_dir&gt;   # 与原 texture.svo 逐字节比对
+</code></pre></div>
+<blockquote>
+<p>AVTS 头 version 随源资产工具版本而异 (实测 14pt=3, 240pt=2); 打包时若无参照默认 3,
+selftest 从参照 svo 的偏移 +4 读取并比对。</p>
+</blockquote>
+<hr />
+<h2 id="13">13. 参考</h2>
+<ul>
+<li><code>RE/rfz_unpack_spec.md</code> / <code>rfz_pack_spec.md</code>: YABX 容器 + ruhuna 实例同构参照, LZW 算法。</li>
+<li>IDA 函数: <code>Yb_ReadMagic_CreateProcessor</code>@0xE91400, <code>Yb_WriteString_LenPrefixed</code>@0xEA2BB0,
+  <code>Yb_Finalize_PayloadSizeAndCRC</code>@0xE91300, <code>RuhunaFontDB_Serialize</code>@0xE91570,
+  <code>Yb_CRC32_Table</code>@0x18FB268。</li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/direct3ddds/dx-graphics-dds-pguide">Microsoft DDS Format</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="2.svo.html" class="md-footer__link md-footer__link--prev" aria-label="上一页: svo文件贴图提取">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                svo文件贴图提取
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../../MaimaiDX/0.start.html" class="md-footer__link md-footer__link--next" aria-label="下一页: 开始">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                开始
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.top", "navigation.instant", "navigation.instant.progress", "content.code.copy", "navigation.footer"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
